@@ -55,13 +55,15 @@ class TSP(object):
         """
         start_time = time.time()
         if method == "AC":
-            ac = AntColonyAlgorithm(dist_mtx=self.dist_mtx, max_iteration=10)
+            print("AntColony Algorithm running...")
+            ac = AntColonyAlgorithm(dist_mtx=self.dist_mtx)
             ac.run()
             end_time = time.time()
             print("AntColony Algorithm run time: ", end_time - start_time)
             self.plot(ac.best_length, "AC")
         elif method == "GA":
-            ga = GeneticAlgorithm(dist_mtx=self.dist_mtx, max_generation=10)
+            print("GeneticAlgorithm running...")
+            ga = GeneticAlgorithm(dist_mtx=self.dist_mtx)
             ga.run()
             end_time = time.time()
             print("GeneticAlgorithm run time", end_time - start_time)

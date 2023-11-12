@@ -16,8 +16,8 @@ class GeneticAlgorithm(object):
         self,
         population_size=500,
         evolution_size=400,
-        cross_size=90,
-        mutation_size=10,
+        cross_size=95,
+        mutation_size=5,
         max_generation=5000,
         city_count=100,
         dist_mtx=None,
@@ -302,7 +302,7 @@ class AntColonyAlgorithm(object):
                     self.best_length[count] = self.best_length[count - 1]
             # 更新信息素矩阵
             self.update_phenomenon_mtx()
-            count += 1
             print(f"min path length: {self.best_length[count]}")
-            print(f"iteration: {count}")
+            print(f"iteration: {count+1}")
+            count += 1
         print(f"best path: {self.best_path}")
