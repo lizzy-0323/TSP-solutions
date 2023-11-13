@@ -15,10 +15,10 @@ class GeneticAlgorithm(object):
     def __init__(
         self,
         population_size=500,
-        evolution_size=400,
-        cross_size=95,
-        mutation_size=5,
-        max_generation=5000,
+        evolution_size=300,
+        cross_size=150,
+        mutation_size=50,
+        max_generation=1000,
         city_count=100,
         dist_mtx=None,
     ) -> None:
@@ -40,7 +40,7 @@ class GeneticAlgorithm(object):
         self.max_generation = max_generation  # 最大进化代数
         self.generations = 0  # 目前的代数
         self.elites = None
-        self.best_gene = None
+        self.best_gene = None  # 最优解
         self.best_length = np.zeros(max_generation)  # 每一代最优路径的长度
         self.dist_mtx = dist_mtx
         self.population = self.init_population()  # 种群
@@ -77,11 +77,15 @@ class GeneticAlgorithm(object):
         Evaluate the fitness of the population and select elites.
         """
         for p in self.population:
-            # 适应度得分为距离*10000的倒数
             p.score = 1 / self.distance(p.gene) * 10000
         # 获得最优解
         self.elites = sorted(self.population, key=lambda x: x.score, reverse=True)
-        self.best_gene = self.elites[0].gene
+        if self.best_gene is None:
+            self.best_gene = self.elites[0].gene
+        # 如果当前最优解更优，则更新最优解
+        if self.distance(self.elites[0].gene) < self.distance(self.best_gene):
+            self.best_gene = self.elites[0].gene
+            print("update best gene")
 
     def crossover(self, parent1, parent2):
         """
@@ -126,7 +130,7 @@ class GeneticAlgorithm(object):
         Generate a new generation using selection, crossover, and mutation.
         """
         next_generation = []
-        # 选择精英
+        # 选择
         for _ in range(self.evolution_size):
             p1 = self.selection(self.population)
             next_generation.append(p1)
@@ -159,7 +163,7 @@ class GeneticAlgorithm(object):
         """run the algorithm"""
         while not self.is_finished():
             self.generation()
-            print(f"generation: {self.generations+1}")
+            print(f"generation: {self.generations}")
             # print(f"best gene: {self.best_gene}")
             print(f"distance:, {self.distance(self.best_gene)}")
         print(f"best gene: {self.best_gene}")

@@ -28,7 +28,8 @@ class TSP(object):
         city = []
         with open(filename, "r") as f:
             lines = f.readlines()
-            for line in lines[:100]:
+            city_limit = 100
+            for line in lines[:city_limit]:
                 location = line.strip().split()
                 city.append([int(location[1]), int(location[2])])
         return city
@@ -53,17 +54,18 @@ class TSP(object):
         select method to solve the problem
         :param method: GA or AC
         """
-        start_time = time.time()
         if method == "AC":
+            start_time = time.time()
             print("AntColony Algorithm running...")
-            ac = AntColonyAlgorithm(dist_mtx=self.dist_mtx)
+            ac = AntColonyAlgorithm(dist_mtx=self.dist_mtx, city_count=100)
             ac.run()
             end_time = time.time()
             print("AntColony Algorithm run time: ", end_time - start_time)
             self.plot(ac.best_length, "AC")
         elif method == "GA":
+            start_time = time.time()
             print("GeneticAlgorithm running...")
-            ga = GeneticAlgorithm(dist_mtx=self.dist_mtx)
+            ga = GeneticAlgorithm(dist_mtx=self.dist_mtx, city_count=100)
             ga.run()
             end_time = time.time()
             print("GeneticAlgorithm run time", end_time - start_time)
@@ -88,4 +90,4 @@ class TSP(object):
 if __name__ == "__main__":
     tsp = TSP()
     tsp.solve("GA")
-    tsp.solve("AC")
+    # tsp.solve("AC")
